@@ -1,0 +1,7 @@
+global:
+  ha:
+    enabled: true
+  actors:
+    enabled: false
+  scheduler:
+    enabled: false

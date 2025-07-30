@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: appset
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: ssh://git@github.com/MasayaAoyama/argocd-test
+      revision: main
+      directories:
+      - path: manifests/*
+
+  template:
+    metadata:
+      name: appset-{{path.basename}}
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: ssh://git@github.com/MasayaAoyama/argocd-test
+        targetRevision: main
+        path: '{{path}}/'
+      destination:
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        retry:
+          limit: 0
+        syncOptions:
+        - CreateNamespace=true
+
